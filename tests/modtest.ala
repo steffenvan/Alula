@@ -1,0 +1,11 @@
+call p
+procedure p
+    read(m);
+    read(n);
+    repeat 
+        r += m % n;
+    until (r)
+    print(m);
+    print(n);
+    print(r)
+end

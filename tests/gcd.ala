@@ -1,0 +1,15 @@
+call gcd
+procedure gcd
+    read(a);
+    read(b);
+    iter += 0;
+    repeat 
+        temp += a;
+        a += b - temp;
+        b += (temp % a) - a;
+        print(temp);
+        iter += 1
+    until (b == 0) + (iter == 0);
+    print(a);
+    print(iter)
+end

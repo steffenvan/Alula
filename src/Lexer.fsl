@@ -1,0 +1,62 @@
+{
+module Lexer
+open System;;
+open Microsoft.FSharp.Text.Lexing;;
+open System.Text;;
+
+
+let keyword s = 
+    match s with
+      | "end"       -> Parser.END() 
+      | "call"      -> Parser.CALL()
+      | "uncall"    -> Parser.UNCALL()
+      | "procedure" -> Parser.PROC()
+      | "if"        -> Parser.IF()
+      | "then"      -> Parser.THEN()
+      | "else"      -> Parser.ELSE()
+      | "fi"        -> Parser.FI()
+      | "repeat"    -> Parser.REPEAT()
+      | "until"     -> Parser.UNTIL()
+      | "print"     -> Parser.PRINT()
+      | "read"      -> Parser.READ()
+      | "local"     -> Parser.LOCAL()
+      | "not"       -> Parser.NOT()
+      | _           -> Parser.ID(s)
+}
+
+rule Token = parse
+    (* Skip whitespace. *)
+    [' ' '\t' '\r' '\n' '\012']+
+    { Token lexbuf }
+
+  | "//" [^ '\n' '\012']* { Token lexbuf } (* comment *)
+    (* Integers. *)
+  | '0' | ['1'-'9']['0'-'9']*
+    { Parser.INT (int (Encoding.UTF8.GetString lexbuf.Lexeme)) }
+
+  | ['a'-'z' 'A'-'Z']['a'-'z' 'A'-'Z' '0'-'9' '_']*
+                          { keyword ( Encoding.UTF8.GetString(lexbuf.Lexeme)) }
+  | "+=" { Parser.INCR  () }
+  | "-=" { Parser.DECR  () }
+  | "==" { Parser.DEQ   () }
+  | ">=" { Parser.GEQ   () }
+  | "!=" { Parser.NEQ   () }
+  | ":=" { Parser.ASSIGN() }
+  | ';'  { Parser.CONCAT() }
+  | '('  { Parser.LPAR  () }
+  | ')'  { Parser.RPAR  () }
+  | '{'  { Parser.LCURLY() }
+  | '}'  { Parser.RCURLY() }
+  | '+'  { Parser.PLUS  () }
+  | '-'  { Parser.MINUS () }
+  | '*'  { Parser.MULT  () }
+  | '/'  { Parser.DIV   () }
+  | '%'  { Parser.MOD   () }
+  | '<'  { Parser.LTH   () }
+
+    (* Special end of file symbol. *)
+  | eof { Parser.EOF () }
+
+    (* We don't understand anything else. *)
+  | _   { failwith "lexer error" }
+  

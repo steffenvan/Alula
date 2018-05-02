@@ -1,0 +1,10 @@
+call p
+procedure p
+    read(n);
+    repeat
+        n += 7
+    until ((n % 2) == 0) + ((n % 2) != 0)
+end
+
+
+    

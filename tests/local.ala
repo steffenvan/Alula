@@ -1,0 +1,14 @@
+call p
+procedure p 
+    x+= 5; 
+    print(x); 
+    local y := 5 { 
+        y -= 3; 
+        y -= 2; 
+        local z := 2 { 
+            z -= 2; 
+            z += 2; 
+            print(z) 
+        } z == 0 
+    } y == 0 
+end  

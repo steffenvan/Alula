@@ -1,0 +1,2 @@
+call p; uncall p
+procedure p x += 10 % 4 end

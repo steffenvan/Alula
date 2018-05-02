@@ -1,0 +1,12 @@
+call fact
+procedure fact 
+    f += 1; 
+    read(n); 
+    repeat
+        temp += f; 
+        f    += temp * (n - 1); 
+        temp -= f / n; 
+        n    -= 1 
+    until (n == 0) + (f == 1);
+    print(f) 
+end

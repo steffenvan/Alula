@@ -1,0 +1,4 @@
+call p; uncall p
+procedure p x += 5; y += 5 end
+
+

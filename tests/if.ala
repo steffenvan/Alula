@@ -1,0 +1,12 @@
+call p
+procedure p
+    read(x);
+    if x < 10 then 
+        x += 10 
+    else
+        temp += x; 
+        x -= temp; 
+        print(temp)
+    fi x >= 10; 
+    print(x)
+end

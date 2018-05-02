@@ -1,0 +1,2 @@
+call p
+procedure p x -= 5 * x end

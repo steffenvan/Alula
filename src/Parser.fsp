@@ -1,0 +1,79 @@
+%{
+open Microsoft.FSharp.Text.Parsing
+%}
+
+%token <int> INT
+%token <string> ID
+%token <unit> IF THEN ELSE FI REPEAT UNTIL
+%token <unit> PROC END
+%token <unit> CALL UNCALL PRINT READ LOCAL
+%token <unit> CONCAT 
+%token <unit> INCR DECR ASSIGN
+%token <unit> LTH GEQ DEQ NEQ
+%token <unit> PLUS MINUS NOT
+%token <unit> MULT DIV MOD
+%token <unit> LPAR RPAR LCURLY RCURLY
+%token <unit> EOF
+
+
+%nonassoc ifprec
+%left DEQ LTH
+%left PLUS MINUS
+%left MULT DIV
+
+%start Prog
+%type <AbSyn.Prog> Prog
+%type <AbSyn.Exp> Exp
+%type <AbSyn.Stat> Stat
+%type <AbSyn.Def> Proc
+%type <AbSyn.Def list> ProcDecs
+
+%%
+
+Prog : Stat ProcDecs EOF { ($1, $2) }
+;
+
+ProcDecs : Proc ProcDecs { $1 :: $2 }
+        |                { [] }
+
+;
+
+
+Exp : INT                { AbSyn.Constant($1)        }
+    | ID                 { AbSyn.Var($1)             }
+    | LPAR  Exp    RPAR  { $2                        }
+    | Exp   PLUS   Exp   { AbSyn.Plus   ($1, $3)     }
+    | Exp   MINUS  Exp   { AbSyn.Minus  ($1, $3)     }
+    | Exp   MULT   Exp   { AbSyn.Times  ($1, $3)     }
+    | Exp   MOD    Exp   { AbSyn.Modulo ($1, $3)     }
+    | Exp   DIV    Exp   { AbSyn.Divide ($1, $3)     }
+    | Exp   LTH    Exp   { AbSyn.Less   ($1, $3)     }
+    | Exp   GEQ    Exp   { AbSyn.GreatEq($1, $3)     }
+    | Exp   DEQ    Exp   { AbSyn.Equal  ($1, $3)     }
+    | Exp   NEQ    Exp   { AbSyn.Equal  ($1, $3)     }
+    | NOT   Exp          { AbSyn.Not    ($2)         }
+;
+
+Stat :
+    | ID   INCR  Exp     { AbSyn.Incr ($1, $3)       }
+    | ID   DECR  Exp     { AbSyn.Decr ($1, $3)       }
+    | Stat CONCAT Stat   { AbSyn.Concat ($1, $3)     }
+    | CALL ID            { AbSyn.Call ($2)           }
+    | UNCALL ID          { AbSyn.Uncall ($2)         }
+    | IF Exp THEN Stat ELSE Stat FI Exp %prec ifprec
+                         { AbSyn.If ($2, $4, $6, $8) }
+    | REPEAT Stat UNTIL Exp 
+                         { AbSyn.Repeat ($2, $4)     }
+    | PRINT LPAR ID RPAR        
+                         { AbSyn.Print ($3)          }
+    | READ LPAR ID RPAR
+                         { AbSyn.Read ($3)           }
+    | LOCAL ID ASSIGN Exp LCURLY Stat RCURLY ID DEQ Exp
+                         { if $2 <> $8 then failwith "The start and end identifiers are not the same."
+                           else AbSyn.Local ($2, $4, $6, $10) }
+
+Proc : 
+    | PROC ID Stat END   { AbSyn.Proc ($2, $3)       }
+
+
+%%

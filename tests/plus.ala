@@ -1,0 +1,2 @@
+call p; uncall p
+procedure p x += 5 - 4; y -= 5 - 10; x += 5 * 5; y += 100/10 end

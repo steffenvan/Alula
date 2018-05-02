@@ -1,0 +1,2 @@
+call p
+procedure p x += 5; print (x); read (x) end

@@ -1,0 +1,18 @@
+call prime
+procedure prime
+    read(n);    
+    iter += 0;
+    repeat
+        f += 1;
+        repeat
+            f += 1
+        until (f == 1) + ((n % f) == 0);
+        temp += n;
+        n    -= temp / f * (f - 1);
+        temp -= n * f;
+        print(f);
+        iter += 1
+    until (n == 1) + (iter == 0);
+    print(n);
+    print(iter)    
+end  

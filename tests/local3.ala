@@ -1,0 +1,23 @@
+call fib
+procedure fib
+    read(n);
+    iter += 0;
+    if n == 0 then 
+        n += 1
+    else
+        fib1 += 0;
+        fib2 += 1;
+        i += 0;
+        tmp += 0;
+        repeat
+            i += 1;
+            tmp += fib1;
+            fib1 += fib2;
+            fib2tmp += fib2;
+            fib2 += tmp + fib2tmp;
+            iter += 1
+        until (n < i) + (iter == 0)
+    fi n == i;
+    print(fib2);
+    print(n)
+end
