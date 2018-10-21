@@ -6,6 +6,7 @@ open System.Collections.Generic
 type SymTab = 
     {   Global: Dictionary<string, int>;
         Local: Dictionary<string, int>  }
+
 let empty () = { Global = new Dictionary<string, int>();
                  Local  = new Dictionary<string, int>() }
 
@@ -28,6 +29,7 @@ let removeLocal var (tab: SymTab) =
     if tab.Local.Remove(var) 
     then ()
     else failwith "Key was not removed. Did not exists or something bad happened."
+
 let call (tab: SymTab) = 
     let newSym = { Global = tab.Global; 
                    Local  = new Dictionary<string, int>() }
