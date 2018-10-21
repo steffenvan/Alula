@@ -9,9 +9,11 @@ open SymTab
 
 exception MyError of string
 type FunTable = Map<string, Stat>
+
 let boolToInt = function
     | true  -> 1
     | false -> 0
+
 let rec evalExp (e: Exp, tab : SymTab) = 
     match e with
       | Constant (var)  -> var
@@ -62,9 +64,9 @@ let rec evalExp (e: Exp, tab : SymTab) =
 // in which x is updated. 
 let rec notContains (var: string, e: Exp) =
     match e with
-      | Plus     (e1, e2) -> notContains (var, e1) && notContains(var, e2)
-      | Constant (var)    -> true
       | Var      (id)     -> id <> var
+      | Constant (var)    -> true
+      | Plus     (e1, e2) -> notContains (var, e1) && notContains(var, e2)
       | Minus    (e1, e2) -> notContains (var, e1) && notContains(var, e2)
       | Times    (e1, e2) -> notContains (var, e1) && notContains(var, e2)
       | Divide   (e1, e2) -> notContains (var, e1) && notContains(var, e2)
