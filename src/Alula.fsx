@@ -52,16 +52,21 @@ let interpret (filename : string) =
     printfn "Choose which direction the program should be executed (forwards or backwards):"
     let direction = System.Console.ReadLine().ToLower()
     let program = parseFile filename    
+
     if direction = "backwards" && program.ToString().Contains("Print")
     then printfn "The program is waiting for input, enter value: "
          Interpreter.evalProg (program, true)
+
     elif direction = "forwards" && program.ToString().Contains("Read")
     then printfn "The program is waiting for input, enter value: "
          Interpreter.evalProg (program, false)
+
     elif direction = "backwards"
     then Interpreter.evalProg (program, true)
+
     elif direction = "forwards"
     then Interpreter.evalProg (program, false)
+
     else printfn "Invalid direction"
 
 [<EntryPoint>]
